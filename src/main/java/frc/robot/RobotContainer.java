@@ -42,7 +42,7 @@ public class RobotContainer {
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-  public final Elevator elevator = new Elevator();
+//   public final Elevator elevator = new Elevator();
 
   private final SwerveRequest.RobotCentric robotRelativeDrive =
       new SwerveRequest.RobotCentric()
@@ -64,9 +64,9 @@ public class RobotContainer {
             () ->
                 drive
                     .withVelocityX(
-                        -joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                        joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(
-                        -joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                        joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(
                         -joystick.getRightX()
                             * MaxAngularRate) // Drive counterclockwise with negative X (left)
@@ -114,7 +114,17 @@ public class RobotContainer {
                           rotation); // Drive counterclockwise with negative X (left)
                 }));
 
-    SmartDashboard.putData(elevator.setPosition(0));
+    // SmartDashboard.putData(elevator.setPosition(0));
+    joystick.leftTrigger().whileTrue(drivetrain.applyRequest(() -> {
+        double aprilTagID = limelightMoveForeward();
+        SmartDashboard.putNumber("aprilTagID", aprilTagID);
+        if (aprilTagID==2){
+            return robotRelativeDrive.withVelocityX(MaxSpeed*0.2);
+        }
+        else{
+            return robotRelativeDrive.withVelocityX(0);
+        }
+    }));
   }
 
   // simple proportional turning control with Limelight.
@@ -154,5 +164,11 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
+  }
+
+  double limelightMoveForeward() {
+    double tagID = LimelightHelpers.getFiducialID("limelight");
+    return tagID;
+
   }
 }
