@@ -7,7 +7,10 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -237,4 +240,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
     m_simNotifier.startPeriodic(kSimLoopPeriod);
   }
+
+  @Logged
+  public double getLeftFrontDriveVoltage() {
+    return this.getModule(0).getDriveMotor().getMotorVoltage().getValueAsDouble();
+  }
+
+  @Logged
+  public Pose2d getPose() {
+    return this.getState().Pose;
+  }
+
 }
