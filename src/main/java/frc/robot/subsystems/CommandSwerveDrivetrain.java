@@ -4,10 +4,14 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -74,6 +78,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
    * This is used to find PID gains for the FieldCentricFacingAngle HeadingController.
    * See the documentation of SwerveRequest.SysIdSwerveRotation for info on importing the log to SysId.
    */
+
   private final SysIdRoutine m_sysIdRoutineRotation =
       new SysIdRoutine(
           new SysIdRoutine.Config(
@@ -92,8 +97,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 SignalLogger.writeDouble("Rotational_Rate", output.in(Volts));
               },
               null,
-              this));
-
+              this)); 
+           
   /* The SysId routine to test */
   private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
@@ -237,4 +242,212 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
     m_simNotifier.startPeriodic(kSimLoopPeriod);
   }
+
+  @Logged
+public double frontRightSteerVoltage() {
+    return this.getModule(1).getSteerMotor().getMotorVoltage().getValueAsDouble();
+}
+
+@Logged
+public double frontRightSteerPosition() {
+    return this.getModule(1).getSteerMotor().getPosition().getValueAsDouble();
+}
+
+@Logged
+public double frontRightSteerSupplyCurrent() {
+    return this.getModule(1).getSteerMotor().getSupplyCurrent().getValueAsDouble();
+}
+
+@Logged
+public double frontRightSteerStatorCurrent() {
+    return this.getModule(1).getSteerMotor().getStatorCurrent().getValueAsDouble();
+}
+
+@Logged
+public double frontRightSteerVelocity() {
+    return this.getModule(1).getSteerMotor().getVelocity().getValueAsDouble();
+}
+
+@Logged
+public double frontLeftSteerVoltage() {
+    return this.getModule(0).getSteerMotor().getMotorVoltage().getValueAsDouble();
+}
+
+@Logged
+public double frontLeftSteerPosition() {
+    return this.getModule(0).getSteerMotor().getPosition().getValueAsDouble();
+}
+
+@Logged
+public double frontLeftSteerSupplyCurrent() {
+    return this.getModule(0).getSteerMotor().getSupplyCurrent().getValueAsDouble();
+}
+
+@Logged
+public double frontLeftSteerStatorCurrent() {
+    return this.getModule(0).getSteerMotor().getStatorCurrent().getValueAsDouble();
+}
+
+@Logged
+public double frontLeftSteerVelocity() {
+    return this.getModule(0).getSteerMotor().getVelocity().getValueAsDouble();
+}
+
+@Logged
+public double backLeftSteerVoltage() {
+    return this.getModule(2).getSteerMotor().getMotorVoltage().getValueAsDouble();
+}
+
+@Logged
+public double backLeftSteerPosition() {
+    return this.getModule(2).getSteerMotor().getPosition().getValueAsDouble();
+}
+
+@Logged
+public double backLeftSteerSupplyCurrent() {
+    return this.getModule(2).getSteerMotor().getSupplyCurrent().getValueAsDouble();
+}
+
+@Logged
+public double backLeftSteerStatorCurrent() {
+    return this.getModule(2).getSteerMotor().getStatorCurrent().getValueAsDouble();
+}
+
+@Logged
+public double backLeftSteerVelocity() {
+    return this.getModule(2).getSteerMotor().getVelocity().getValueAsDouble();
+}
+
+@Logged
+public double backRightSteerVoltage() {
+    return this.getModule(3).getSteerMotor().getMotorVoltage().getValueAsDouble();
+}
+
+@Logged
+public double backRightSteerPosition() {
+    return this.getModule(3).getSteerMotor().getPosition().getValueAsDouble();
+}
+
+@Logged
+public double backRightSteerSupplyCurrent() {
+    return this.getModule(3).getSteerMotor().getSupplyCurrent().getValueAsDouble();
+}
+
+@Logged
+public double backRightSteerStatorCurrent() {
+    return this.getModule(3).getSteerMotor().getStatorCurrent().getValueAsDouble();
+}
+
+@Logged
+public double backRightSteerVelocity() {
+    return this.getModule(3).getSteerMotor().getVelocity().getValueAsDouble();
+}
+
+@Logged
+public double frontRightDriveVoltage() {
+    return this.getModule(1).getDriveMotor().getMotorVoltage().getValueAsDouble();
+}
+
+@Logged
+public double frontRightDrivePosition() {
+    return this.getModule(1).getDriveMotor().getPosition().getValueAsDouble();
+}
+
+@Logged
+public double frontRightDriveSupplyCurrent() {
+    return this.getModule(1).getDriveMotor().getSupplyCurrent().getValueAsDouble();
+}
+
+@Logged
+public double frontRightDriveStatorCurrent() {
+    return this.getModule(1).getDriveMotor().getStatorCurrent().getValueAsDouble();
+}
+
+@Logged
+public double frontRightDriveVelocity() {
+    return this.getModule(1).getDriveMotor().getVelocity().getValueAsDouble();
+}
+
+@Logged
+public double frontLeftDriveVoltage() {
+    return this.getModule(0).getDriveMotor().getMotorVoltage().getValueAsDouble();
+}
+
+@Logged
+public double frontLeftDrivePosition() {
+    return this.getModule(0).getDriveMotor().getPosition().getValueAsDouble();
+}
+
+@Logged
+public double frontLeftDriveSupplyCurrent() {
+    return this.getModule(0).getDriveMotor().getSupplyCurrent().getValueAsDouble();
+}
+
+@Logged
+public double frontLeftDriveStatorCurrent() {
+    return this.getModule(0).getDriveMotor().getStatorCurrent().getValueAsDouble();
+}
+
+@Logged
+public double frontLeftDriveVelocity() {
+    return this.getModule(0).getDriveMotor().getVelocity().getValueAsDouble();
+}
+
+@Logged
+public double backLeftDriveVoltage() {
+    return this.getModule(2).getDriveMotor().getMotorVoltage().getValueAsDouble();
+}
+
+@Logged
+public double backLeftDrivePosition() {
+    return this.getModule(2).getDriveMotor().getPosition().getValueAsDouble();
+}
+
+@Logged
+public double backLeftDriveSupplyCurrent() {
+    return this.getModule(2).getDriveMotor().getSupplyCurrent().getValueAsDouble();
+}
+
+@Logged
+public double backLeftDriveStatorCurrent() {
+    return this.getModule(2).getDriveMotor().getStatorCurrent().getValueAsDouble();
+}
+
+@Logged
+public double backLeftDriveVelocity() {
+    return this.getModule(2).getDriveMotor().getVelocity().getValueAsDouble();
+}
+
+@Logged
+public double backRightDriveVoltage() {
+    return this.getModule(3).getDriveMotor().getMotorVoltage().getValueAsDouble();
+}
+
+@Logged
+public double backRightDrivePosition() {
+    return this.getModule(3).getDriveMotor().getPosition().getValueAsDouble();
+}
+
+@Logged
+public double backRightDriveSupplyCurrent() {
+    return this.getModule(3).getDriveMotor().getSupplyCurrent().getValueAsDouble();
+}
+
+@Logged
+public double backRightDriveStatorCurrent() {
+    return this.getModule(3).getDriveMotor().getStatorCurrent().getValueAsDouble();
+}
+
+@Logged
+public double backRightDriveVelocity() {
+    return this.getModule(3).getDriveMotor().getVelocity().getValueAsDouble();
+}
+
+
+
+  @Logged
+  public Pose2d getPose() {
+    return this.getState().Pose;
+  }
+
 }

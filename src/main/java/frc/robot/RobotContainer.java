@@ -8,6 +8,8 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,6 +20,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
 
+@Logged
 public class RobotContainer {
   private double MaxSpeed =
       TunerConstants.kSpeedAt12Volts
@@ -40,9 +43,13 @@ public class RobotContainer {
 
   private final CommandXboxController joystick = new CommandXboxController(0);
 
+  private final CommandXboxController operator = new CommandXboxController(1);
+
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
   public final Elevator elevator = new Elevator();
+
+ // public final Intake intake = new Intake();
 
   private final SwerveRequest.RobotCentric robotRelativeDrive =
       new SwerveRequest.RobotCentric()
@@ -93,6 +100,7 @@ public class RobotContainer {
 
     drivetrain.registerTelemetry(logger::telemeterize);
 
+// lock onto april tag 
     joystick
         .rightTrigger()
         .whileTrue(

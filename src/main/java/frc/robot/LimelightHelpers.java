@@ -20,8 +20,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
-import frc.robot.LimelightHelpers.LimelightResults;
-import frc.robot.LimelightHelpers.PoseEstimate;
+//import frc.robot.LimelightHelpers.LimelightResults;
+//import frc.robot.LimelightHelpers.PoseEstimate;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -604,7 +604,7 @@ public class LimelightHelpers {
         pose, adjustedTimestamp, latency, tagCount, tagSpan, tagDist, tagArea, rawFiducials);
   }
 
-  private static RawFiducial[] getRawFiducials(String limelightName) {
+ private static RawFiducial[] getRawFiducials(String limelightName) {
     var entry = LimelightHelpers.getLimelightNTTableEntry(limelightName, "rawfiducials");
     var rawFiducialArray = entry.getDoubleArray(new double[0]);
     int valsPerEntry = 7;
