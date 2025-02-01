@@ -1,13 +1,8 @@
-
-package frc.robot.subsystems.intake;
-
-import java.io.ObjectInputFilter.Config;
-import java.lang.module.Configuration;
+package frc.robot.subsystems.climber;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -15,13 +10,12 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
- 
-public class Intake extends SubsystemBase {
+public class Climber extends SubsystemBase {
 
+
+    private final TalonFX  climberKraken = new TalonFX(0);
     
-    private final TalonFX  intakeKraken = new TalonFX(0);
-    
-    public Intake() {
+    public Climber() {
 
         var motorOutputConfig =
             new MotorOutputConfigs()
@@ -41,28 +35,17 @@ public class Intake extends SubsystemBase {
             .withMotorOutput(motorOutputConfig);
             
         
-        intakeKraken.getConfigurator().apply(talonFXConfig);
+        climberKraken.getConfigurator().apply(talonFXConfig);
     }
    
 
     public void stopIntake() {
-        intakeKraken.set(0);
+        climberKraken.set(0);
     }
 
     public Command runIntake(double speed){
         return run(() -> {
-            intakeKraken.set(speed);
+            climberKraken.set(speed);
         });
     }
-
-    public Command intakeAlgae() {
-        return runIntake(0.5);
-
-    }
-
-    
- } 
-
- 
-
-    
+}

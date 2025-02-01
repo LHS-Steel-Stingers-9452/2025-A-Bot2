@@ -444,7 +444,6 @@ public double backRightDriveVelocity() {
 }
 
 
-
   @Logged
   public Pose2d getPose() {
     return this.getState().Pose;
