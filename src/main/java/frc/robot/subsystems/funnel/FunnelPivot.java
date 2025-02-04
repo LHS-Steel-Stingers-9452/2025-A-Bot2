@@ -39,11 +39,11 @@ public class FunnelPivot extends SubsystemBase {
     }
    
 
-    public void stopIntake() {
+    public void stopPivot() {
         pivotKraken.set(0);
     }
 
-    public Command runIntake(double speed){
+    public Command runPivot(double speed){
         return run(() -> {
             pivotKraken.set(speed);
         });

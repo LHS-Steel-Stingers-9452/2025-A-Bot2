@@ -39,11 +39,11 @@ public class Climber extends SubsystemBase {
     }
    
 
-    public void stopIntake() {
+    public void stopClimber() {
         climberKraken.set(0);
     }
 
-    public Command runIntake(double speed){
+    public Command runClimber(double speed){
         return run(() -> {
             climberKraken.set(speed);
         });
