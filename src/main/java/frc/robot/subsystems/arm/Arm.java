@@ -69,7 +69,7 @@ private final SysIdRoutine m_sysIdRoutine =
             .withSupplyCurrentLimitEnable(true);
     var feedbackConfig =
         new FeedbackConfigs()
-            .withSensorToMechanismRatio(21.428571428571427);
+            .withSensorToMechanismRatio(6480); // 18(gear ratio) * 360(degrees)
     var slot0Config =
         new Slot0Configs()
             .withGravityType(GravityTypeValue.Arm_Cosine)

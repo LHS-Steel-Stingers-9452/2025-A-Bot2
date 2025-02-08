@@ -60,7 +60,7 @@ private final SysIdRoutine m_sysIdRoutine =
             .withSupplyCurrentLimitEnable(true);
     var feedbackConfig =
         new FeedbackConfigs()
-            .withSensorToMechanismRatio(0);
+            .withSensorToMechanismRatio(56.0114554209); // 9(gear ratio) * 1.981(sprocket diamater) * pi
     var slot0Config =
         new Slot0Configs()
             .withGravityType(GravityTypeValue.Elevator_Static)
