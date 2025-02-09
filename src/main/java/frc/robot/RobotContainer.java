@@ -6,6 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -19,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.intake.Intake;
 
 @Logged
 public class RobotContainer {
@@ -49,7 +52,9 @@ public class RobotContainer {
 
 //   public final Elevator elevator = new Elevator();
 
- // public final Intake intake = new Intake();
+  public final Arm arm = new Arm();
+
+  public final Intake intake = new Intake();
 
   private final SwerveRequest.RobotCentric robotRelativeDrive =
       new SwerveRequest.RobotCentric()
@@ -63,8 +68,18 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    SmartDashboard.putData("runArm", arm.runArm(0.1));
+    SmartDashboard.putData("runArmBackwards", arm.runArm(-0.1));
+    SmartDashboard.putData("stopArm", arm.runArm(0));
+    SmartDashboard.putData("zeroArm", arm.zeroArm());
+
+    SmartDashboard.putData("setEncoderStowPosition", arm.setArmEncoderStow());
+    SmartDashboard.putData("go to zero motion magic", arm.setPosition(0));
+
+    
     // Note that X is defined as forward according to WPILib convention,
     // and Y is defined as to the left according to WPILib convention.
+
     drivetrain.setDefaultCommand(
         // Drivetrain will execute this command periodically
         drivetrain.applyRequest(
@@ -86,14 +101,15 @@ public class RobotContainer {
             drivetrain.applyRequest(
                 () ->
                     point.withModuleDirection(
-                        new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
+                        new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));  
 
-    // Run SysId routines when holding back/start and X/Y.
-    // Note that each routine should be run exactly once in a single log.
-    joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-    joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-    joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-    joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+    joystick.b().whileTrue(arm.sysIdDynamic(Direction.kForward));
+    joystick.x().whileTrue(arm.sysIdDynamic(Direction.kReverse));
+    joystick.y().whileTrue(arm.sysIdQuasistatic(Direction.kForward));
+    joystick.a().whileTrue(arm.sysIdQuasistatic(Direction.kReverse));
+
+    joystick.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+    joystick.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
 
     // reset the field-centric heading on left bumper press
     joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));

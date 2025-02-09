@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class Arm extends SubsystemBase {
 // change ID
-  private final TalonFX armKraken = new TalonFX(4);
+  private final TalonFX armKraken = new TalonFX(11);
 
   public final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0)
         .withSlot(0);
@@ -35,9 +35,9 @@ private final VoltageOut m_voltReq = new VoltageOut(0.0);
 private final SysIdRoutine m_sysIdRoutine =
    new SysIdRoutine(
       new SysIdRoutine.Config(
-         Volts.of(0.25).per(Second),        // Use default ramp rate (1 V/s) & change volts per sec
-         Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout 
-         Seconds.of(20),        // Use default timeout (10 s) & lower nubmer ples
+         Volts.of(.5).per(Second),        // Use default ramp rate (1 V/s) & change volts per sec
+         Volts.of(1), // Reduce dynamic step voltage to 4 to prevent brownout 
+         Seconds.of(2.5),        // Use default timeout (10 s) & lower nubmer ples
                       // Log state with Phoenix SignalLogger class
          (state) -> SignalLogger.writeString("state", state.toString())
       ),
@@ -52,12 +52,12 @@ private final SysIdRoutine m_sysIdRoutine =
 
     var motionMagicConfig =
         new MotionMagicConfigs()
-            .withMotionMagicAcceleration(1.5)
-            .withMotionMagicCruiseVelocity(1.5);
+            .withMotionMagicAcceleration(1)
+            .withMotionMagicCruiseVelocity(1);
 
     var motorOutputConfig =
         new MotorOutputConfigs()
-            .withInverted(InvertedValue.CounterClockwise_Positive)
+            .withInverted(InvertedValue.Clockwise_Positive)
             .withNeutralMode(NeutralModeValue.Brake);
             
 
@@ -69,15 +69,15 @@ private final SysIdRoutine m_sysIdRoutine =
             .withSupplyCurrentLimitEnable(true);
     var feedbackConfig =
         new FeedbackConfigs()
-            .withSensorToMechanismRatio(6480); // 18(gear ratio) * 360(degrees)
+            .withSensorToMechanismRatio(18); // 18(gear ratio) * 360(degrees)
     var slot0Config =
         new Slot0Configs()
             .withGravityType(GravityTypeValue.Arm_Cosine)
-            .withKA(0.031146)
-            .withKG(0)
-            .withKP(0.5)
-            .withKS(0.031686)
-            .withKV(2.4891);
+            .withKA(0.53584)
+            .withKG(0.397)
+            .withKP(0.1)
+            .withKS(0.16558)
+            .withKV(1.6063);
 
     var talonFXConfig = 
         new TalonFXConfiguration()
@@ -102,6 +102,18 @@ private final SysIdRoutine m_sysIdRoutine =
     return run(() -> {
         armKraken.set(speed);
     }); 
+  }
+
+  public Command zeroArm() {
+    return runOnce(() -> {
+        armKraken.setPosition(0);
+    });
+  }
+
+  public Command setArmEncoderStow() {
+    return runOnce(() -> {
+        armKraken.setPosition(0.37);
+    });
   }
 
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {

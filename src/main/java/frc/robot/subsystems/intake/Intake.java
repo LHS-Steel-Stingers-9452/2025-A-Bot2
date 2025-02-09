@@ -17,9 +17,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
  
 public class Intake extends SubsystemBase {
-
+ 
     
-    private final TalonFX  intakeKraken = new TalonFX(0);
+    private final TalonFX  intakeKraken = new TalonFX(13);
     
     public Intake() {
 
