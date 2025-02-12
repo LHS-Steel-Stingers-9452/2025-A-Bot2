@@ -21,6 +21,8 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.funnel.Funnel;
 import frc.robot.subsystems.intake.Intake;
 
 @Logged
@@ -50,11 +52,15 @@ public class RobotContainer {
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-//   public final Elevator elevator = new Elevator();
+  public final Elevator elevator = new Elevator();
 
   public final Arm arm = new Arm();
 
   public final Intake intake = new Intake();
+
+  public final Climber climber = new Climber();
+
+  public final Funnel funnel = new Funnel();
 
   private final SwerveRequest.RobotCentric robotRelativeDrive =
       new SwerveRequest.RobotCentric()
@@ -68,13 +74,26 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+
     SmartDashboard.putData("runArm", arm.runArm(0.1));
     SmartDashboard.putData("runArmBackwards", arm.runArm(-0.1));
     SmartDashboard.putData("stopArm", arm.runArm(0));
     SmartDashboard.putData("zeroArm", arm.zeroArm());
+    //SmartDashboard.putData("setArmPose", arm.setPosition(0.5));
 
     SmartDashboard.putData("setEncoderStowPosition", arm.setArmEncoderStow());
     SmartDashboard.putData("go to zero motion magic", arm.setPosition(0));
+
+    SmartDashboard.putData("runIntake", intake.runIntake(0.2));
+    SmartDashboard.putData("runIntakeBackwards", intake.runIntake(-0.2));
+  
+
+    SmartDashboard.putData("runClimber", climber.runClimber(0.1));
+    SmartDashboard.putData("runClimberBackwards", climber.runClimber(-1));
+
+    SmartDashboard.putData("runFunnel", funnel.runFunnel(0.5));
+
+     
 
     
     // Note that X is defined as forward according to WPILib convention,

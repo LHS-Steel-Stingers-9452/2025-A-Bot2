@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Climber extends SubsystemBase {
 
 
-    private final TalonFX  climberKraken = new TalonFX(0);
+    private final TalonFX  climberKraken = new TalonFX(10);
     
     public Climber() {
 

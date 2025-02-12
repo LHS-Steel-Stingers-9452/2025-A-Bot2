@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Funnel extends SubsystemBase{
 
 
-      private final TalonFX  funnelKraken = new TalonFX(0);
+      private final TalonFX  funnelKraken = new TalonFX(14);
 
     public Funnel() {
 
@@ -39,11 +39,11 @@ public class Funnel extends SubsystemBase{
     }
    
 
-    public void stopIntake() {
+    public void stopFunnel() {
         funnelKraken.set(0);
     }
 
-    public Command runIntake(double speed){
+    public Command runFunnel(double speed){
         return run(() -> {
             funnelKraken.set(speed);
         });

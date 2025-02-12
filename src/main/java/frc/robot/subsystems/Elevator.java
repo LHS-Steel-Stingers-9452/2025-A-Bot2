@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -21,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class Elevator extends SubsystemBase {
 
-  private final TalonFX elevatorKraken = new TalonFX(0);
+  private final TalonFX elevatorKraken = new TalonFX(12);
 
   public final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0)
         .withSlot(0);
@@ -46,6 +47,10 @@ private final SysIdRoutine m_sysIdRoutine =
 
   public Elevator() {
 
+    var MotionMagicConfig =
+        new MotionMagicConfigs()
+            .withMotionMagicAcceleration(1)
+            .withMotionMagicCruiseVelocity(1);
 
     var motorOutputConfig =
         new MotorOutputConfigs()
