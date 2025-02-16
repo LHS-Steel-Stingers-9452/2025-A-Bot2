@@ -8,10 +8,12 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -20,6 +22,8 @@ public class Intake extends SubsystemBase {
  
     
     private final TalonFX  intakeKraken = new TalonFX(13);
+
+    public final CANrange sensor = new CANrange(19);
     
     public Intake() {
 
@@ -57,9 +61,44 @@ public class Intake extends SubsystemBase {
 
     public Command intakeAlgae() {
         return runIntake(0.5);
-
     }
 
+    @Logged
+    public double getRange() {
+        return sensor.getDistance().getValueAsDouble();
+    }
+
+    @Logged
+    public boolean hasCoral() {
+
+      return getRange()< 0.15;
+    
+    }
+    @Logged
+    public double intakeVoltage() {
+        return intakeKraken.getMotorVoltage().getValueAsDouble();
+    }
+    
+    @Logged
+    public double intakePosition() {
+        return intakeKraken.getPosition().getValueAsDouble();
+    }
+    
+    @Logged
+    public double intakeSupplyCurrent() {
+        return intakeKraken.getSupplyCurrent().getValueAsDouble();
+    }
+    
+    @Logged
+    public double intakeStatorCurrent() {
+        return intakeKraken.getStatorCurrent().getValueAsDouble();
+    }
+    
+    @Logged
+    public double intakeVelocity() {
+        return intakeKraken.getVelocity().getValueAsDouble();
+    }
+    
     
 } 
 

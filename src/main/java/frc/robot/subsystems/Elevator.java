@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -49,8 +50,8 @@ private final SysIdRoutine m_sysIdRoutine =
 
     var MotionMagicConfig =
         new MotionMagicConfigs()
-            .withMotionMagicAcceleration(1)
-            .withMotionMagicCruiseVelocity(1);
+            .withMotionMagicAcceleration(10) //10
+            .withMotionMagicCruiseVelocity(8); //8
 
     var motorOutputConfig =
         new MotorOutputConfigs()
@@ -59,37 +60,88 @@ private final SysIdRoutine m_sysIdRoutine =
 
     var currentLimitConfig =
         new CurrentLimitsConfigs()
-            .withStatorCurrentLimit(100)
-            .withSupplyCurrentLimit(50)
+            .withStatorCurrentLimit(70)
+            .withSupplyCurrentLimit(40)
             .withStatorCurrentLimitEnable(true)
             .withSupplyCurrentLimitEnable(true);
     var feedbackConfig =
         new FeedbackConfigs()
-            .withSensorToMechanismRatio(56.0114554209); // 9(gear ratio) * 1.981(sprocket diamater) * pi
+            .withSensorToMechanismRatio(9.0); // 9(gear ratio) * 1.981(sprocket diamater) * pi
     var slot0Config =
         new Slot0Configs()
             .withGravityType(GravityTypeValue.Elevator_Static)
             .withKA(0)
-            .withKG(0)
-            .withKP(0)
-            .withKS(0)
-            .withKV(0);
+            .withKG(0.68)
+            .withKP(0.8)
+            .withKS(0.2)
+            .withKV(1.058);
 
     var talonFXConfig = 
         new TalonFXConfiguration()
         .withCurrentLimits(currentLimitConfig)
         .withMotorOutput(motorOutputConfig)
         .withFeedback(feedbackConfig)
-        .withSlot0(slot0Config);
+        .withSlot0(slot0Config)
+        .withMotionMagic(MotionMagicConfig);
     elevatorKraken.getConfigurator().apply(talonFXConfig);
   }
 
   public Command setPosition(double pos) {
-    motionMagicRequest.withPosition(pos);
-    return run(() -> {
+    return runOnce(() -> {
+        motionMagicRequest.withPosition(pos);
         elevatorKraken.setControl(motionMagicRequest);
     });
   }
+
+  public Command runElevator(double speed){
+    return runOnce(() -> {
+        elevatorKraken.set(speed);
+    }); 
+  }
+
+  public Command zeroElevatorEncoder() {
+    return runOnce(() -> {
+        elevatorKraken.setPosition(0);
+    });
+    }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return m_sysIdRoutine.quasistatic(direction);
+     }
+     
+     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return m_sysIdRoutine.dynamic(direction);
+     }
+
+@Logged
+public double elevatorVoltage() {
+    return elevatorKraken.getMotorVoltage().getValueAsDouble();
+}
+
+@Logged
+public double elevatorPosition() {
+    return elevatorKraken.getPosition().getValueAsDouble();
+}
+
+@Logged
+public double elevatorPositionInches() {
+    return elevatorKraken.getPosition().getValueAsDouble()*1.981*Math.PI;
+}
+
+@Logged
+public double elevatorSupplyCurrent() {
+    return elevatorKraken.getSupplyCurrent().getValueAsDouble();
+}
+
+@Logged
+public double elevatorStatorCurrent() {
+    return elevatorKraken.getStatorCurrent().getValueAsDouble();
+}
+
+@Logged
+public double elevatorVelocity() {
+    return elevatorKraken.getVelocity().getValueAsDouble();
+}
   
   
 }

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.CommandManager;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
@@ -78,7 +79,7 @@ public class RobotContainer {
     SmartDashboard.putData("runArm", arm.runArm(0.1));
     SmartDashboard.putData("runArmBackwards", arm.runArm(-0.1));
     SmartDashboard.putData("stopArm", arm.runArm(0));
-    SmartDashboard.putData("zeroArm", arm.zeroArm());
+    SmartDashboard.putData("zeroArmEncoder", arm.zeroArm());
     //SmartDashboard.putData("setArmPose", arm.setPosition(0.5));
 
     SmartDashboard.putData("setEncoderStowPosition", arm.setArmEncoderStow());
@@ -92,6 +93,12 @@ public class RobotContainer {
     SmartDashboard.putData("runClimberBackwards", climber.runClimber(-1));
 
     SmartDashboard.putData("runFunnel", funnel.runFunnel(0.5));
+
+    SmartDashboard.putData("runElevator", elevator.runElevator(0.1));
+    SmartDashboard.putData("zeroElevatorEncoder", elevator.zeroElevatorEncoder());
+    SmartDashboard.putData("setElevatorPosition 2.0", elevator.setPosition(2.0));
+    SmartDashboard.putData("setElevatorPosition 3.0", elevator.setPosition(3.0));
+
 
      
 
@@ -122,14 +129,31 @@ public class RobotContainer {
                     point.withModuleDirection(
                         new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));  
 
-    joystick.b().whileTrue(arm.sysIdDynamic(Direction.kForward));
-    joystick.x().whileTrue(arm.sysIdDynamic(Direction.kReverse));
-    joystick.y().whileTrue(arm.sysIdQuasistatic(Direction.kForward));
-    joystick.a().whileTrue(arm.sysIdQuasistatic(Direction.kReverse));
+    // joystick.b().whileTrue(elevator.sysIdDynamic(Direction.kForward));
+    // joystick.x().whileTrue(elevator.sysIdDynamic(Direction.kReverse));
+    // joystick.y().whileTrue(elevator.sysIdQuasistatic(Direction.kForward));
+    // joystick.a().whileTrue(elevator.sysIdQuasistatic(Direction.kReverse));
 
-    joystick.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
-    joystick.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+    // score L2
+    operator.b().onTrue(CommandManager.setPositions(arm, elevator, 0.31 , 1.0));
+    // score L3
+    operator.y().onTrue(CommandManager.setPositions(arm, elevator, 0.31 , 2.8));
+    //
+    SmartDashboard.putData("algae L3", CommandManager.setPositions(arm, elevator, -0.16 , 2.8));
+    SmartDashboard.putData("intakeAlgae", intake.runIntake(-0.2));
+    // Score L4
+    operator.x().onTrue(CommandManager.setPositions(arm, elevator, 0.23 , 5.2));
+    
+    operator.povDown().onTrue(CommandManager.intakeCoral(funnel, intake));
 
+   // joystick.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+    //joystick.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+
+    //operator.leftBumper().onTrue
+    operator.rightBumper().onTrue(intake.runIntake(0.2));
+    operator.leftBumper().onTrue(CommandManager.intakePositions(arm, elevator));
+
+    operator.leftTrigger().onTrue(CommandManager.setPositions(arm, elevator, 0.3, 0.3));
     // reset the field-centric heading on left bumper press
     joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 

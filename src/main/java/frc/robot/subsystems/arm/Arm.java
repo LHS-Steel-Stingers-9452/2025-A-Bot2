@@ -52,7 +52,7 @@ private final SysIdRoutine m_sysIdRoutine =
 
     var motionMagicConfig =
         new MotionMagicConfigs()
-            .withMotionMagicAcceleration(1)
+            .withMotionMagicAcceleration(2)
             .withMotionMagicCruiseVelocity(1);
 
     var motorOutputConfig =
@@ -75,7 +75,7 @@ private final SysIdRoutine m_sysIdRoutine =
             .withGravityType(GravityTypeValue.Arm_Cosine)
             .withKA(0.53584)
             .withKG(0.397)
-            .withKP(0.1)
+            .withKP(1.0)
             .withKS(0.16558)
             .withKV(1.6063);
 
@@ -92,8 +92,8 @@ private final SysIdRoutine m_sysIdRoutine =
   }
 
   public Command setPosition(double pos) {
-    motionMagicRequest.withPosition(pos);
-    return run(() -> {
+    return runOnce(() -> {
+        motionMagicRequest.withPosition(pos);
         armKraken.setControl(motionMagicRequest);
     });
   }
