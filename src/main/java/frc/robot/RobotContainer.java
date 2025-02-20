@@ -45,6 +45,7 @@ public class RobotContainer {
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
+
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   private final CommandXboxController joystick = new CommandXboxController(0);
@@ -52,6 +53,7 @@ public class RobotContainer {
   private final CommandXboxController operator = new CommandXboxController(1);
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+
 
   public final Elevator elevator = new Elevator();
 
@@ -99,6 +101,11 @@ public class RobotContainer {
     SmartDashboard.putData("setElevatorPosition 2.0", elevator.setPosition(2.0));
     SmartDashboard.putData("setElevatorPosition 3.0", elevator.setPosition(3.0));
 
+    SmartDashboard.putData("algae L3", CommandManager.setPositions(arm, elevator, -0.16 , 2.8));
+    SmartDashboard.putData("intakeAlgae", intake.runIntake(-0.2));
+
+
+
 
      
 
@@ -135,12 +142,11 @@ public class RobotContainer {
     // joystick.a().whileTrue(elevator.sysIdQuasistatic(Direction.kReverse));
 
     // score L2
-    operator.b().onTrue(CommandManager.setPositions(arm, elevator, 0.31 , 1.0));
+    operator.b().onTrue(CommandManager.setPositions(arm, elevator, 0.30 , 1.0));
     // score L3
-    operator.y().onTrue(CommandManager.setPositions(arm, elevator, 0.31 , 2.8));
-    //
-    SmartDashboard.putData("algae L3", CommandManager.setPositions(arm, elevator, -0.16 , 2.8));
-    SmartDashboard.putData("intakeAlgae", intake.runIntake(-0.2));
+    operator.y().onTrue(CommandManager.setPositions(arm, elevator, 0.30 , 2.8));
+    
+    
     // Score L4
     operator.x().onTrue(CommandManager.setPositions(arm, elevator, 0.23 , 5.2));
     
@@ -150,11 +156,16 @@ public class RobotContainer {
     //joystick.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
 
     //operator.leftBumper().onTrue
-    operator.rightBumper().onTrue(intake.runIntake(0.2));
-    operator.leftBumper().onTrue(CommandManager.intakePositions(arm, elevator));
 
+    operator.leftBumper().onTrue(CommandManager.intakePositions(arm, elevator));
     operator.leftTrigger().onTrue(CommandManager.setPositions(arm, elevator, 0.3, 0.3));
+    
+    operator.rightBumper().whileTrue(intake.runIntake(0.2));
+    operator.rightTrigger().whileTrue(intake.runIntake(-0.2));
+
+    
     // reset the field-centric heading on left bumper press
+
     joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
     drivetrain.registerTelemetry(logger::telemeterize);
